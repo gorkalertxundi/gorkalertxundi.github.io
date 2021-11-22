@@ -1,0 +1,34 @@
+:root {
+    --gray: #222222;
+}
+
+section {
+    background-color: var(--gray);
+    /* margin-top: 1em; */
+    margin-bottom: 1em;
+    margin-left: 7em;
+    margin-right: 7em;
+    border-radius: 1em;
+    padding: 2em;
+    font-size: 0.8em;
+}
+
+div.item-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    grid-template-areas: "text img";
+    margin-bottom: 1em;
+}
+
+div.col-1 {
+    grid-area: text;
+}
+
+div.col-2 {
+    grid-area: img;
+}
+
+div.col-2 > img {
+    width: 100%;
+    height: auto;
+}

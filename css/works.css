@@ -10,7 +10,9 @@ section {
     margin-left: 7em;
     margin-right: 7em;
     border-radius: 1em;
-    padding: 2em;
+    padding-left: 2em;
+    padding-right: 2em;
+    padding-bottom: 2em;
     font-size: 0.8em;
 }
 

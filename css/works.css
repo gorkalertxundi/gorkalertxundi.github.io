@@ -1,5 +1,6 @@
 :root {
     --gray: #222222;
+    --light-gray: #dddddd;
 }
 
 section {
@@ -24,11 +25,33 @@ div.col-1 {
     grid-area: text;
 }
 
-div.col-2 {
-    grid-area: img;
+.item-row {
+    margin-top: 2em;
+    margin-bottom: 2em;
+    background-color: rgba(221, 221, 221, 0.1);
+    border-radius: 0.7em;
+    padding: 2em;
 }
 
-div.col-2 > img {
-    width: 100%;
+div.col-1 > h2, div.col-1-b > h2 {
+    margin-bottom: 0.7em;
+}
+
+div.col-2 {
+    grid-area: img;
+    align-items: center;
+    display: flex;
+    justify-content: center;
+}
+
+div.col-2-b {
+    grid-area: text;
+    align-items: center;
+    display: flex;
+    justify-content: center;
+}
+
+div.col-2 > img, div.col-2-b > img {
+    width: 50%;
     height: auto;
 }

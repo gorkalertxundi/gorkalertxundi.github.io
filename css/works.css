@@ -5,14 +5,13 @@
 
 section {
     background-color: var(--gray);
-    /* margin-top: 1em; */
+    margin-top: 0.5em;
     margin-bottom: 1em;
     margin-left: 7em;
     margin-right: 7em;
     border-radius: 1em;
     padding-left: 2em;
     padding-right: 2em;
-    padding-bottom: 2em;
     font-size: 0.8em;
 }
 
@@ -56,4 +55,13 @@ div.col-2-b {
 div.col-2 > img, div.col-2-b > img {
     width: 50%;
     height: auto;
+}
+
+footer {
+    text-align: center;
+    background-color: rgb(27, 27, 27);
+    margin-left:  -2em;
+    margin-right: -2em;
+    border-radius: 0 0 1em 1em;
+    padding: 0.5em;
 }

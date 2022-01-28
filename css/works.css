@@ -94,10 +94,17 @@ footer {
     padding: 0.5em;
 }
 
-@media screen and (max-width: 400px) {
+@media screen and (max-width: 555px) {
     section {
         margin-left: 0;
         margin-right: 0;
+    }
+}
+
+@media screen and (min-width: 555px) and (max-width: 755px) {
+    section {
+        margin-left: 3.5em;
+        margin-right: 3.5em;
     }
 }
 

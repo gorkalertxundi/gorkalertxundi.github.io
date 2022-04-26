@@ -6,11 +6,15 @@ canvas.width = innerWidth
 canvas.height = innerHeight
 
 const gravity = 0.5;
-let img = new Image()
-img.src = "../assets/Main Characters/Virtual Guy/jump32x32.png"
+
+let playerasset = new Image()
+playerasset.src = "../assets/Main Characters/Virtual Guy/jump32x32.png"
+
+let terrain44 = new Image()
+terrain44.src = "../assets/Terrain/Terrain18x18.png"
 
 class Player {
-    constructor(x, y, width, height, color) {
+    constructor(x, y, width, height) {
         this.position = {
             x: x,
             y: y
@@ -21,14 +25,13 @@ class Player {
         }
         this.width = width
         this.height = height
-        this.color = color
         this.score = 0
     }
 
     draw() {
         // c.fillStyle = this.color
         // c.fillRect(this.position.x, this.position.y, this.width, this.height)
-        c.drawImage(img, this.position.x, this.position.y, this.height, this.width)
+        c.drawImage(playerasset, this.position.x, this.position.y, this.height, this.width)
     }
 
     update() {
@@ -44,26 +47,33 @@ class Player {
 }
 
 class Platform {
-    constructor(x, y, width, height, color) {
+    constructor(x, y, width, height) {
         this.position = {
             x: x,
             y: y
         }
         this.width = width
         this.height = height
-        this.color = color
     }
 
     draw() {
-        c.fillStyle = this.color
-        c.fillRect(this.position.x, this.position.y, this.width, this.height)
+        // c.fillStyle = this.color
+        // c.fillRect(this.position.x, this.position.y, this.width, this.height)
+        c.drawImage(terrain44, this.position.x, this.position.y, this.height, this.width)
     }
 }
 
-const player = new Player(100, 10, 32, 32, 'red')
+const player = new Player(100, 10, 52, 52)
 const x_player_vel = 5
-const platforms = [new Platform(400, 350, 100, 10, 'green'), 
-                    new Platform(100, 450, 100, 10, 'green')]
+const platforms = [new Platform(100, 600, 60, 60), 
+                    new Platform(160, 600, 60, 60),
+                    new Platform(220, 600, 60, 60),
+                    new Platform(280, 600, 60, 60),
+                    new Platform(340, 600, 60, 60),
+                    new Platform(600, 400, 60, 60),
+                    new Platform(660, 400, 60, 60),
+                    new Platform(720, 400, 60, 60),
+                    new Platform(780, 400, 60, 60)]
 
 const keys = {
     right: {

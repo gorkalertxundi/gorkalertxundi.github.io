@@ -6,6 +6,8 @@ canvas.width = innerWidth
 canvas.height = innerHeight
 
 const gravity = 0.5;
+let img = new Image()
+img.src = "../assets/Main Characters/Virtual Guy/jump32x32.png"
 
 class Player {
     constructor(x, y, width, height, color) {
@@ -24,8 +26,9 @@ class Player {
     }
 
     draw() {
-        c.fillStyle = this.color
-        c.fillRect(this.position.x, this.position.y, this.width, this.height)
+        // c.fillStyle = this.color
+        // c.fillRect(this.position.x, this.position.y, this.width, this.height)
+        c.drawImage(img, this.position.x, this.position.y, this.height, this.width)
     }
 
     update() {
@@ -71,6 +74,8 @@ const keys = {
     }
 }
 
+let scrollOffset = 0
+
 function animate() {
     requestAnimationFrame(animate) // executes a code snippet at a specified time in the future.
     c.clearRect(0, 0, canvas.width, canvas.height) // clear canvas
@@ -89,10 +94,12 @@ function animate() {
         player.velocity.x = 0
 
         if(keys.right.isDown) {
+            scrollOffset += x_player_vel
             platforms.forEach(platform => {
                 platform.position.x -= x_player_vel
             })
         } else if (keys.left.isDown) {
+            scrollOffset -= x_player_vel
             platforms.forEach(platform => {
                 platform.position.x += x_player_vel
             })
@@ -108,7 +115,12 @@ function animate() {
             player.velocity.y = 0
         }
     })
-    
+
+    // finish line detection
+    if (scrollOffset > 2000) {
+        // alert('You win!')
+        console.log('You win!')
+    }
 }
 
 animate()

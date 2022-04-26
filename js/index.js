@@ -5,13 +5,19 @@ const c = canvas.getContext('2d')
 canvas.width = innerWidth
 canvas.height = innerHeight
 
-const gravity = 0.5;
+const gravity = 1;
 
 let playerasset = new Image()
-playerasset.src = "../assets/Main Characters/Virtual Guy/jump32x32.png"
+playerasset.src = "../assets/Main Characters/Mask Dude/jump32x32.png"
 
 let terrain44 = new Image()
-terrain44.src = "../assets/Terrain/Terrain18x18.png"
+terrain44.src = "../assets/Terrain/TerrainPink46x48.png"
+
+let spike16 = new Image()
+spike16.src = "../assets/Traps/Spikes/spike16x16.png"
+
+let start = new Image()
+start.src = "../assets/Items/Checkpoints/Start/start_idle64x64.png"
 
 class Player {
     constructor(x, y, width, height) {
@@ -47,33 +53,59 @@ class Player {
 }
 
 class Platform {
-    constructor(x, y, width, height) {
+    constructor(x, y, width, height, texture) {
         this.position = {
             x: x,
             y: y
         }
         this.width = width
         this.height = height
+        this.texture = texture
     }
 
     draw() {
         // c.fillStyle = this.color
         // c.fillRect(this.position.x, this.position.y, this.width, this.height)
-        c.drawImage(terrain44, this.position.x, this.position.y, this.height, this.width)
+        c.drawImage(this.texture, this.position.x, this.position.y, this.height, this.width)
     }
 }
 
 const player = new Player(100, 10, 52, 52)
 const x_player_vel = 5
-const platforms = [new Platform(100, 600, 60, 60), 
-                    new Platform(160, 600, 60, 60),
-                    new Platform(220, 600, 60, 60),
-                    new Platform(280, 600, 60, 60),
-                    new Platform(340, 600, 60, 60),
-                    new Platform(600, 400, 60, 60),
-                    new Platform(660, 400, 60, 60),
-                    new Platform(720, 400, 60, 60),
-                    new Platform(780, 400, 60, 60)]
+
+const platformsize = 60
+const spikesize = 32
+const platforms = [ 
+                    new Platform(0, canvas.height-platformsize, platformsize, platformsize, terrain44), 
+                    new Platform(60, canvas.height-platformsize, platformsize, platformsize, terrain44),
+                    new Platform(120, canvas.height-platformsize, platformsize, platformsize, terrain44),
+                    new Platform(180, canvas.height-platformsize, platformsize, platformsize, terrain44),
+                    new Platform(240, canvas.height-platformsize, platformsize, platformsize, terrain44),
+                    new Platform(300, canvas.height-platformsize, platformsize, platformsize, terrain44),
+                    new Platform(360, canvas.height-platformsize, platformsize, platformsize, terrain44),
+                    new Platform(420, canvas.height-platformsize, platformsize, platformsize, terrain44),
+                    new Platform(480, canvas.height-platformsize, platformsize, platformsize, terrain44),
+                    new Platform(540, canvas.height-platformsize, platformsize, platformsize, terrain44),
+                    new Platform(600, canvas.height-platformsize, platformsize, platformsize, terrain44),
+                    new Platform(660, canvas.height-platformsize, platformsize, platformsize, terrain44),
+                    new Platform(720, canvas.height-spikesize, spikesize, spikesize, spike16),
+                    new Platform(752, canvas.height-spikesize, spikesize, spikesize, spike16),
+                    new Platform(784, canvas.height-spikesize, spikesize, spikesize, spike16),
+                    new Platform(816, canvas.height-spikesize, spikesize, spikesize, spike16),
+                    new Platform(848, canvas.height-spikesize, spikesize, spikesize, spike16),
+                    new Platform(880, canvas.height-spikesize, spikesize, spikesize, spike16),
+                    new Platform(920, canvas.height-platformsize, platformsize, platformsize, terrain44),
+                    new Platform(980, canvas.height-platformsize, platformsize, platformsize, terrain44),
+                    new Platform(1040, canvas.height-platformsize, platformsize, platformsize, terrain44),
+                    new Platform(1100, canvas.height-platformsize, platformsize, platformsize, terrain44),
+                    new Platform(1160, canvas.height-platformsize, platformsize, platformsize, terrain44),
+                    new Platform(1220, canvas.height-platformsize, platformsize, platformsize, terrain44),
+                    new Platform(1280, canvas.height-platformsize, platformsize, platformsize, terrain44),
+                    ]
+
+const startpoint = new Platform(70, canvas.height-platformsize-80, 80, 80, start)
+const elements = [ startpoint ]
+
 
 const keys = {
     right: {
@@ -94,6 +126,9 @@ function animate() {
     platforms.forEach(platform => {
         platform.draw()
     })
+    elements.forEach(element => {
+        element.draw()
+    })
 
     // player movement
     if(keys.right.isDown && player.position.x < 400) { // a partir de 400px el personaje se para y las palataformas a la izquierda a la misma velocidad
@@ -108,10 +143,16 @@ function animate() {
             platforms.forEach(platform => {
                 platform.position.x -= x_player_vel
             })
+            elements.forEach(element => {
+                element.position.x -= x_player_vel
+            })
         } else if (keys.left.isDown) {
             scrollOffset -= x_player_vel
             platforms.forEach(platform => {
                 platform.position.x += x_player_vel
+            })
+            elements.forEach(element => {
+                element.position.x += x_player_vel
             })
         }
     }

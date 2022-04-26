@@ -94,13 +94,9 @@ const platforms = [
                     new Platform(816, canvas.height-spikesize, spikesize, spikesize, spike16),
                     new Platform(848, canvas.height-spikesize, spikesize, spikesize, spike16),
                     new Platform(880, canvas.height-spikesize, spikesize, spikesize, spike16),
-                    new Platform(920, canvas.height-platformsize, platformsize, platformsize, terrain44),
-                    new Platform(980, canvas.height-platformsize, platformsize, platformsize, terrain44),
-                    new Platform(1040, canvas.height-platformsize, platformsize, platformsize, terrain44),
-                    new Platform(1100, canvas.height-platformsize, platformsize, platformsize, terrain44),
-                    new Platform(1160, canvas.height-platformsize, platformsize, platformsize, terrain44),
-                    new Platform(1220, canvas.height-platformsize, platformsize, platformsize, terrain44),
-                    new Platform(1280, canvas.height-platformsize, platformsize, platformsize, terrain44),
+                    new Platform(912, canvas.height-platformsize, platformsize, platformsize, terrain44),
+                    new Platform(972, canvas.height-platformsize, platformsize, platformsize, terrain44),
+                    new Platform(1032, canvas.height-platformsize, platformsize, platformsize, terrain44),
                     ]
 
 const startpoint = new Platform(70, canvas.height-platformsize-80, 80, 80, start)

@@ -46,15 +46,24 @@ class Player {
         this.frames = 1
         this.score = 0
         this.sprites = {
-            idle: playeridle,
-            run: playerrun,
-            jump: playerjump
+            idle: {
+                sprite: playeridle,
+                frames: 10
+            },
+            run: {
+                sprite: playerrun,
+                frames: 11
+            },
+            jump: {
+                sprite: playerjump,
+                frames: 0
+            },
         }
         this.currentSprite = this.sprites.idle
     }
 
     draw() {
-        c.drawImage(this.currentSprite, 
+        c.drawImage(this.currentSprite.sprite, 
             32 * this.frames, 
             0,
             32,
@@ -67,7 +76,7 @@ class Player {
 
     update() {
         this.frames++
-        if (this.frames > 10) this.frames = 1
+        if (this.frames > this.currentSprite.frames) this.frames = 1
         this.draw()
         this.position.y += this.velocity.y
         this.position.x += this.velocity.x
@@ -243,13 +252,16 @@ addEventListener('keydown', (event) => {
     switch(event.keyCode) {
         case 65: // A
             keys.left.isDown = true
+            player.currentSprite = player.sprites.run
             break
         case 68: // D
             keys.right.isDown = true
+            player.currentSprite = player.sprites.run
             break
         case 87: // W
         case 32: // Space
             player.velocity.y -= 20
+            player.currentSprite = player.sprites.jump
             break
         case 83: // S
             // player.velocity.y += 10
@@ -261,11 +273,15 @@ addEventListener('keyup', (event) => {
     switch(event.keyCode) {
         case 65: // A
             keys.left.isDown = false
+            player.currentSprite = player.sprites.idle
             break
         case 68: // D
             keys.right.isDown = false
+            player.currentSprite = player.sprites.idle
             break
         case 87: // W
+        case 32:
+            player.currentSprite = player.sprites.idle
             // player.velocity.y -= 5
             break
         case 83: // S

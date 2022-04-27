@@ -19,6 +19,12 @@ spike16.src = "../assets/Traps/Spikes/spike16x16.png"
 let start = new Image()
 start.src = "../assets/Items/Checkpoints/Start/start_idle64x64.png"
 
+let reinforcebox = new Image()
+reinforcebox.src = "../assets/Items/Boxes/Box3/idle.png"
+
+let box = new Image()
+box.src = "../assets/Items/Boxes/Box1/idle.png"
+
 class Player {
     constructor(x, y, width, height) {
         this.position = {
@@ -35,8 +41,6 @@ class Player {
     }
 
     draw() {
-        // c.fillStyle = this.color
-        // c.fillRect(this.position.x, this.position.y, this.width, this.height)
         c.drawImage(playerasset, this.position.x, this.position.y, this.height, this.width)
     }
 
@@ -46,14 +50,12 @@ class Player {
         this.position.x += this.velocity.x
         if (this.position.y + this.height + this.velocity.y <= canvas.height) {
             this.velocity.y += gravity
-        } else {
-            this.velocity.y = 0
         }
     }
 }
 
 class Platform {
-    constructor(x, y, width, height, texture) {
+    constructor(x, y, width, height, texture, isKillable) {
         this.position = {
             x: x,
             y: y
@@ -61,47 +63,20 @@ class Platform {
         this.width = width
         this.height = height
         this.texture = texture
+        this.isKillable = isKillable
     }
 
     draw() {
-        // c.fillStyle = this.color
-        // c.fillRect(this.position.x, this.position.y, this.width, this.height)
         c.drawImage(this.texture, this.position.x, this.position.y, this.height, this.width)
     }
 }
 
-const player = new Player(100, 10, 52, 52)
-const x_player_vel = 5
-
-const platformsize = 60
-const spikesize = 32
-const platforms = [ 
-                    new Platform(0, canvas.height-platformsize, platformsize, platformsize, terrain44), 
-                    new Platform(60, canvas.height-platformsize, platformsize, platformsize, terrain44),
-                    new Platform(120, canvas.height-platformsize, platformsize, platformsize, terrain44),
-                    new Platform(180, canvas.height-platformsize, platformsize, platformsize, terrain44),
-                    new Platform(240, canvas.height-platformsize, platformsize, platformsize, terrain44),
-                    new Platform(300, canvas.height-platformsize, platformsize, platformsize, terrain44),
-                    new Platform(360, canvas.height-platformsize, platformsize, platformsize, terrain44),
-                    new Platform(420, canvas.height-platformsize, platformsize, platformsize, terrain44),
-                    new Platform(480, canvas.height-platformsize, platformsize, platformsize, terrain44),
-                    new Platform(540, canvas.height-platformsize, platformsize, platformsize, terrain44),
-                    new Platform(600, canvas.height-platformsize, platformsize, platformsize, terrain44),
-                    new Platform(660, canvas.height-platformsize, platformsize, platformsize, terrain44),
-                    new Platform(720, canvas.height-spikesize, spikesize, spikesize, spike16),
-                    new Platform(752, canvas.height-spikesize, spikesize, spikesize, spike16),
-                    new Platform(784, canvas.height-spikesize, spikesize, spikesize, spike16),
-                    new Platform(816, canvas.height-spikesize, spikesize, spikesize, spike16),
-                    new Platform(848, canvas.height-spikesize, spikesize, spikesize, spike16),
-                    new Platform(880, canvas.height-spikesize, spikesize, spikesize, spike16),
-                    new Platform(912, canvas.height-platformsize, platformsize, platformsize, terrain44),
-                    new Platform(972, canvas.height-platformsize, platformsize, platformsize, terrain44),
-                    new Platform(1032, canvas.height-platformsize, platformsize, platformsize, terrain44),
-                    ]
-
-const startpoint = new Platform(70, canvas.height-platformsize-80, 80, 80, start)
-const elements = [ startpoint ]
-
+let player = null
+let x_player_vel = null
+let platforms = null
+let boxes = null
+let elements = null
+let scrollOffset = null
 
 const keys = {
     right: {
@@ -112,7 +87,65 @@ const keys = {
     }
 }
 
-let scrollOffset = 0
+init()
+
+function init() {
+    player = new Player(100, 10, 52, 52)
+    x_player_vel = 5
+
+    const platformsize = 60
+    const spikesize = {
+        height: 16,
+        width: 32
+    }
+
+    platforms = [ 
+                    new Platform(0, canvas.height-platformsize, platformsize, platformsize, terrain44, false), 
+                    new Platform(60, canvas.height-platformsize, platformsize, platformsize, terrain44, false),
+                    new Platform(120, canvas.height-platformsize, platformsize, platformsize, terrain44, false),
+                    new Platform(180, canvas.height-platformsize, platformsize, platformsize, terrain44, false),
+                    new Platform(240, canvas.height-platformsize, platformsize, platformsize, terrain44, false),
+                    new Platform(300, canvas.height-platformsize, platformsize, platformsize, terrain44, false),
+                    new Platform(360, canvas.height-platformsize, platformsize, platformsize, terrain44, false),
+                    new Platform(420, canvas.height-platformsize, platformsize, platformsize, terrain44, false),
+                    new Platform(480, canvas.height-platformsize, platformsize, platformsize, terrain44, false),
+                    new Platform(540, canvas.height-platformsize, platformsize, platformsize, terrain44, false),
+                    new Platform(600, canvas.height-platformsize, platformsize, platformsize, terrain44, false),
+                    new Platform(660, canvas.height-platformsize, platformsize, platformsize, terrain44, false),
+                    new Platform(720, canvas.height-spikesize.height, spikesize.height, spikesize.width, spike16, true),
+                    new Platform(752, canvas.height-spikesize.height, spikesize.height, spikesize.width, spike16, true),
+                    new Platform(784, canvas.height-spikesize.height, spikesize.height, spikesize.width, spike16, true),
+                    new Platform(816, canvas.height-spikesize.height, spikesize.height, spikesize.width, spike16, true),
+                    new Platform(848, canvas.height-spikesize.height, spikesize.height, spikesize.width, spike16, true),
+                    new Platform(880, canvas.height-spikesize.height, spikesize.height, spikesize.width, spike16, true),
+                    new Platform(912, canvas.height-platformsize, platformsize, platformsize, terrain44, false),
+                    new Platform(972, canvas.height-platformsize, platformsize, platformsize, terrain44, false),
+                    new Platform(1032, canvas.height-platformsize, platformsize, platformsize, terrain44, false),
+                    new Platform(1092, canvas.height-platformsize, platformsize, platformsize, terrain44, false),
+                    new Platform(1152, canvas.height-platformsize, platformsize, platformsize, terrain44, false),
+                    new Platform(1212, canvas.height-platformsize, platformsize, platformsize, terrain44, false),
+                    new Platform(1272, canvas.height-platformsize, platformsize, platformsize, terrain44, false),
+                    new Platform(1332, canvas.height-platformsize, platformsize, platformsize, terrain44, false),
+                    new Platform(1392, canvas.height-platformsize, platformsize, platformsize, terrain44, false),
+                    new Platform(1452, canvas.height-platformsize, platformsize, platformsize, terrain44, false),
+                    new Platform(1512, canvas.height-platformsize, platformsize, platformsize, terrain44, false),
+                ]
+
+    const boxsize = {
+        width: 42,
+        height: 32
+    }
+    boxes = [ new Platform(300, canvas.height-platformsize-160, boxsize.height, boxsize.width, reinforcebox),
+        new Platform(330, canvas.height-platformsize-160, boxsize.height, boxsize.width, reinforcebox)
+    ]
+
+    elements = [ new Platform(70, canvas.height-platformsize-80, 80, 80, start) ]
+
+    keys.right.isDown = false
+    keys.left.isDown = false
+
+    scrollOffset = 0
+}
 
 function animate() {
     requestAnimationFrame(animate) // executes a code snippet at a specified time in the future.
@@ -121,6 +154,9 @@ function animate() {
     player.update()
     platforms.forEach(platform => {
         platform.draw()
+    })
+    boxes.forEach(box => {
+        box.draw()
     })
     elements.forEach(element => {
         element.draw()
@@ -134,21 +170,17 @@ function animate() {
     } else {
         player.velocity.x = 0
 
+        let allElements = platforms.concat(boxes).concat(elements)
+        
         if(keys.right.isDown) {
             scrollOffset += x_player_vel
-            platforms.forEach(platform => {
+            allElements.forEach(platform => {
                 platform.position.x -= x_player_vel
-            })
-            elements.forEach(element => {
-                element.position.x -= x_player_vel
             })
         } else if (keys.left.isDown) {
             scrollOffset -= x_player_vel
-            platforms.forEach(platform => {
+            allElements.forEach(platform => {
                 platform.position.x += x_player_vel
-            })
-            elements.forEach(element => {
-                element.position.x += x_player_vel
             })
         }
     }
@@ -160,6 +192,9 @@ function animate() {
             && player.position.x + player.width >= platform.position.x // X left axis collision
             && player.position.x <= platform.position.x + platform.width) { // X right axis collision
             player.velocity.y = 0
+            if (platform.isKillable) {
+                init()
+            }
         }
     })
 
@@ -167,6 +202,11 @@ function animate() {
     if (scrollOffset > 2000) {
         // alert('You win!')
         console.log('You win!')
+    }
+
+    // lose condition
+    if(player.position.y >= canvas.height) {
+        init()
     }
 }
 
@@ -181,6 +221,7 @@ addEventListener('keydown', (event) => {
             keys.right.isDown = true
             break
         case 87: // W
+        case 32: // Space
             player.velocity.y -= 20
             break
         case 83: // S

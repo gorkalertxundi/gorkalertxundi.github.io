@@ -181,7 +181,8 @@ function animate() {
     // player movement
     if(keys.right.isDown && player.position.x < 400) { // a partir de 400px el personaje se para y las palataformas a la izquierda a la misma velocidad
         player.velocity.x = x_player_vel
-    } else if (keys.left.isDown && player.position.x > 100) { // a partir de 400px el personaje se para y las plataformas a la derecha
+    } else if ((keys.left.isDown && player.position.x > 100)
+                || keys.left.isDown && scrollOffset === 0 && player.position.x > 0) { // a partir de 400px el personaje se para y las plataformas a la derecha
         player.velocity.x = -x_player_vel
     } else {
         player.velocity.x = 0
@@ -191,7 +192,7 @@ function animate() {
             allElements.forEach(platform => {
                 platform.position.x -= x_player_vel
             })
-        } else if (keys.left.isDown) {
+        } else if (keys.left.isDown && scrollOffset > 0) {
             scrollOffset -= x_player_vel
             allElements.forEach(platform => {
                 platform.position.x += x_player_vel

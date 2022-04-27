@@ -162,6 +162,22 @@ function animate() {
         element.draw()
     })
 
+    let allElements = platforms.concat(boxes)
+    
+    // collision detection
+    allElements.forEach(platform => {
+        if (player.position.y + player.height <= platform.position.y 
+            && player.position.y + player.height + player.velocity.y >= platform.position.y // Y axis collision
+            && player.position.x + player.width >= platform.position.x // X left axis collision
+            && player.position.x <= platform.position.x + platform.width) { // X right axis collision
+            player.velocity.y = 0
+            if (platform.isKillable) {
+                init()
+            }
+        }
+    })
+
+    allElements = allElements.concat(elements)
     // player movement
     if(keys.right.isDown && player.position.x < 400) { // a partir de 400px el personaje se para y las palataformas a la izquierda a la misma velocidad
         player.velocity.x = x_player_vel
@@ -169,8 +185,6 @@ function animate() {
         player.velocity.x = -x_player_vel
     } else {
         player.velocity.x = 0
-
-        let allElements = platforms.concat(boxes).concat(elements)
         
         if(keys.right.isDown) {
             scrollOffset += x_player_vel
@@ -185,18 +199,7 @@ function animate() {
         }
     }
 
-    // collision detection
-    platforms.forEach(platform => {
-        if (player.position.y + player.height <= platform.position.y 
-            && player.position.y + player.height + player.velocity.y >= platform.position.y // Y axis collision
-            && player.position.x + player.width >= platform.position.x // X left axis collision
-            && player.position.x <= platform.position.x + platform.width) { // X right axis collision
-            player.velocity.y = 0
-            if (platform.isKillable) {
-                init()
-            }
-        }
-    })
+    
 
     // finish line detection
     if (scrollOffset > 2000) {

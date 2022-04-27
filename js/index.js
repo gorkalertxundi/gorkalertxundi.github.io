@@ -7,8 +7,14 @@ canvas.height = innerHeight
 
 const gravity = 1;
 
-let playerasset = new Image()
-playerasset.src = "../assets/Main Characters/Mask Dude/jump32x32.png"
+let playeridle = new Image()
+playeridle.src = "../assets/Main Characters/Mask Dude/idle32x32.png"
+
+let playerrun = new Image()
+playerrun.src = "../assets/Main Characters/Mask Dude/run32x32.png"
+
+let playerjump = new Image()
+playerjump.src = "../assets/Main Characters/Mask Dude/run32x32.png"
 
 let terrain44 = new Image()
 terrain44.src = "../assets/Terrain/TerrainPink46x48.png"
@@ -37,14 +43,31 @@ class Player {
         }
         this.width = width
         this.height = height
+        this.frames = 1
         this.score = 0
+        this.sprites = {
+            idle: playeridle,
+            run: playerrun,
+            jump: playerjump
+        }
+        this.currentSprite = this.sprites.idle
     }
 
     draw() {
-        c.drawImage(playerasset, this.position.x, this.position.y, this.height, this.width)
+        c.drawImage(this.currentSprite, 
+            32 * this.frames, 
+            0,
+            32,
+            32,
+            this.position.x, 
+            this.position.y, 
+            this.height, 
+            this.width)
     }
 
     update() {
+        this.frames++
+        if (this.frames > 10) this.frames = 1
         this.draw()
         this.position.y += this.velocity.y
         this.position.x += this.velocity.x

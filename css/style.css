@@ -4,4 +4,5 @@ body {
 
 canvas {
     background-image: url("../assets/Background/Pink.png");
+    display: block;
 }

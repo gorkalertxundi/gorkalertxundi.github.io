@@ -31,6 +31,12 @@ reinforcebox.src = "../assets/Items/Boxes/Box3/idle.png"
 let box = new Image()
 box.src = "../assets/Items/Boxes/Box1/idle.png"
 
+let wasd = new Image()
+wasd.src = "../assets/portfolio/intro/wasd.png"
+
+let space = new Image()
+space.src = "../assets/portfolio/intro/space.png"
+
 class Player {
     constructor(x, y, width, height) {
         this.position = {
@@ -103,11 +109,28 @@ class Platform {
     }
 }
 
+class CanvasText {
+    constructor(x, y, text, color, font) {
+        this.x = x
+        this.y = y
+        this.text = text
+        this.color = color
+        this.font = font
+    }
+
+    draw() {
+        c.fillStyle = this.color
+        c.font = this.font
+        c.fillText(this.text, this.x, this.y)
+    }
+}
+
 let player = null
 let x_player_vel = null
 let platforms = null
 let boxes = null
 let elements = null
+let texts = null
 let scrollOffset = null
 
 const keys = {
@@ -164,14 +187,21 @@ function init() {
                 ]
 
     const boxsize = {
-        width: 42,
-        height: 32
+        width: 30,
+        height: 30
     }
-    boxes = [ new Platform(300, canvas.height-platformsize-160, boxsize.height, boxsize.width, reinforcebox),
-        new Platform(330, canvas.height-platformsize-160, boxsize.height, boxsize.width, reinforcebox)
+    boxes = [ new Platform(450, canvas.height-platformsize-160, boxsize.height, boxsize.width, reinforcebox),
+        new Platform(480, canvas.height-platformsize-160, boxsize.height, boxsize.width, reinforcebox),
+        new Platform(510, canvas.height-platformsize-160, boxsize.height, boxsize.width, reinforcebox),
+        new Platform(540, canvas.height-platformsize-160, boxsize.height, boxsize.width, reinforcebox),
+        new Platform(570, canvas.height-platformsize-160, boxsize.height, boxsize.width, reinforcebox),
     ]
 
-    elements = [ new Platform(70, canvas.height-platformsize-80, 80, 80, start) ]
+    elements = [ new Platform(70, canvas.height-platformsize-80, 80, 80, start),
+        new Platform(70, canvas.height-platformsize-300, 90, 150, wasd),
+        ]
+    
+    texts = [new CanvasText(70, canvas.height-platformsize-400, "Press 'W' to jump", "white", "30px Arial")]
 
     keys.right.isDown = false
     keys.left.isDown = false
@@ -183,17 +213,20 @@ function animate() {
     requestAnimationFrame(animate) // executes a code snippet at a specified time in the future.
     c.clearRect(0, 0, canvas.width, canvas.height) // clear canvas
     
-    player.update()
-    platforms.forEach(platform => {
-        platform.draw()
-    })
     boxes.forEach(box => {
         box.draw()
     })
     elements.forEach(element => {
         element.draw()
     })
-
+    texts.forEach(text => {
+        text.draw()
+    })
+    platforms.forEach(platform => {
+        platform.draw()
+    })
+    player.update()
+    
     let allElements = platforms.concat(boxes)
     
     // collision detection
@@ -224,10 +257,16 @@ function animate() {
             allElements.forEach(platform => {
                 platform.position.x -= x_player_vel
             })
+            texts.forEach(text => {
+                text.x -= x_player_vel
+            })
         } else if (keys.left.isDown && scrollOffset > 0) {
             scrollOffset -= x_player_vel
             allElements.forEach(platform => {
                 platform.position.x += x_player_vel
+            })
+            texts.forEach(text => {
+                text.x += x_player_vel
             })
         }
     }

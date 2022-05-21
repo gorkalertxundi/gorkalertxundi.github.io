@@ -31,11 +31,8 @@ reinforcebox.src = "../assets/Items/Boxes/Box3/idle.png"
 let box = new Image()
 box.src = "../assets/Items/Boxes/Box1/idle.png"
 
-let wasd = new Image()
-wasd.src = "../assets/portfolio/intro/wasd.png"
-
-let space = new Image()
-space.src = "../assets/portfolio/intro/space.png"
+let controls = new Image()
+controls.src = "../assets/portfolio/intro/controls.png"
 
 class Player {
     constructor(x, y, width, height) {
@@ -198,10 +195,10 @@ function init() {
     ]
 
     elements = [ new Platform(70, canvas.height-platformsize-80, 80, 80, start),
-        new Platform(70, canvas.height-platformsize-300, 90, 150, wasd),
+        new Platform(70, canvas.height-platformsize-300, 90, 325, controls),
         ]
     
-    texts = [new CanvasText(70, canvas.height-platformsize-400, "Press 'W' to jump", "white", "30px Arial")]
+    texts = [new CanvasText(70, canvas.height-platformsize-400, "Use the following controls to move around my portfolio", "white", "25px Arial")]
 
     keys.right.isDown = false
     keys.left.isDown = false
